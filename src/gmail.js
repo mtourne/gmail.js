@@ -1674,6 +1674,28 @@ var Gmail_ = function(localJQuery) {
         return url;
     };
 
+    api.helper.get.emails_custom_pre = function(smart_label_name) {
+      var page = api.get.current_page();
+      var url = window.location.origin + window.location.pathname + "?ui=2&ik=" + api.tracker.ik+"&rid=" + api.tracker.rid + "&view=tl&num=120&rt=1";
+      var start = $(".aqK:visible .Dj").find("span:first").text().replace(",", "").replace(".", "");
+      console.log("start: ", start)
+      if (start) {
+        start = parseInt(start - 1);
+        url += "&start=" + start +
+          "&sstart=" + start;
+      } else {
+        url += "&start=0";
+      }
+
+      if (smart_label_name) {
+        console.log('getting smartlabel: smartlabel_', smart_label_name)
+        url += "&cat=^smartlabel_" + smart_label_name +"&search=category";
+      } else {
+        url += "&search=" + page;
+      }
+
+      return url;
+    };
 
     api.helper.get.visible_emails_post = function(get_data) {
         var emails = [];
@@ -1725,6 +1747,13 @@ var Gmail_ = function(localJQuery) {
         return emails;
     };
 
+    api.get.custom_emails = function(smart_label_name) {
+        var url = api.helper.get.emails_custom_pre(smart_label_name);
+        var get_data = api.tools.make_request(url);
+        var emails = api.helper.get.visible_emails_post(get_data);
+
+        return emails;
+    };
 
     api.get.visible_emails_async = function(callback) {
         var url = api.helper.get.visible_emails_pre();
