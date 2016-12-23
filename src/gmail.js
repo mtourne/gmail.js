@@ -1747,22 +1747,21 @@ var Gmail_ = function(localJQuery) {
         return emails;
     };
 
-    api.get.custom_emails = function(smart_label_name) {
-        var url = api.helper.get.emails_custom_pre(smart_label_name);
-        var get_data = api.tools.make_request(url);
-        var emails = api.helper.get.visible_emails_post(get_data);
-
-        return emails;
-    };
-
-    api.get.visible_emails_async = function(callback) {
+     api.get.visible_emails_async = function(callback) {
         var url = api.helper.get.visible_emails_pre();
         api.tools.make_request_async(url, "GET", function(get_data) {
             var emails = api.helper.get.visible_emails_post(get_data);
             callback(emails);
         });
-    };
+     };
 
+     api.get.smartlabel_emails_async = function(smart_label_name, callback) {
+       var url = api.helper.get.emails_custom_pre(smart_label_name);
+       api.tools.make_request_async(url, "GET", function(get_data) {
+         var emails = api.helper.get.visible_emails_post(get_data);
+         callback(emails);
+       });
+    };
 
     api.get.selected_emails_data = function(){
         var selected_emails = [];
